@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transfer Berhasil</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .receipt-container {
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .receipt {
+      width: 100%;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      padding: 32px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .watermark {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image: url("assets/project.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      opacity: 1;
+    }
+
+    .receipt-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .success-icon {
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      background-color: #2DBEBC;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      border: 4px solid #2DBEBC;
+    }
+
+    .success-icon::before {
+      content: '';
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 4px solid #2DBEBC;
+    }
+
+    .checkmark {
+      width: 24px;
+      height: 40px;
+      border: 6px solid white;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg);
+      margin-top: -6px;
+      margin-left: 4px;
+    }
+
+    .receipt-title {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: #1a1a1a;
+      letter-spacing: -0.3px;
+    }
+
+    .receipt-date {
+      text-align: center;
+      font-size: 13px;
+      font-weight: 400;
+      margin-bottom: 15px;
+      color: #666;
+    }
+
+    .amount-section {
+      text-align: center;
+      margin-bottom: 28px;
+      padding: 20px 0 2px 0;
+    }
+
+    .amount-large {
+      font-size: 32px;
+      font-weight: 700;
+      color: #0D4D90;
+      letter-spacing: -1px;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0;
+      padding: 14px 0;
+      font-size: 14px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .detail-row:last-of-type {
+      border-bottom: none;
+    }
+
+    .detail-label {
+      color: #666;
+      font-weight: 400;
+      flex: 0 0 auto;
+      min-width: 140px;
+    }
+
+    .detail-value {
+      color: #1a1a1a;
+      font-weight: 500;
+      text-align: right;
+      flex: 1;
+      word-break: break-word;
+    }
+
+    .detail-value.strong {
+      font-weight: 700;
+      color: #0D4D90;
+    }
+
+    .divider {
+      display: none;
+    }
+
+    .download-btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      margin-top: 28px;
+      background-color: #0D4D90;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 15px;
+      transition: background-color 0.3s;
+    }
+
+    .download-btn:hover {
+      background-color: #0a3d73;
+    }
+
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+
+      .receipt-container {
+        max-width: 100%;
+      }
+
+      .receipt {
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      .download-btn {
+        display: none !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .receipt {
+        padding: 24px 20px;
+      }
+
+      .amount-large {
+        font-size: 28px;
+      }
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+
+<body>
+  <div class="receipt-container" id="receipt-container">
+    <div class="receipt">
+      <div class="watermark"></div>
+      <div class="receipt-content">
+        
+        <div class="success-icon">
+          <div class="checkmark"></div>
+        </div>
+
+        <div class="receipt-title">Transfer Berhasil</div>
+        <div class="receipt-date" id="receiptDate">05 Des 2025</div>
+
+        <div class="amount-section">
+          <div class="amount-large" id="amountLarge">IDR 10,000,000.00</div>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Nama Penerima</span>
+          <span class="detail-value" id="beneficiaryName">SUTANTO</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Bank Tujuan</span>
+          <span class="detail-value" id="bankName">BRI</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">No. Rekening Tujuan</span>
+          <span class="detail-value" id="accountNo">876-574-667</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Dari Rekening</span>
+          <span class="detail-value" id="fromAccount" style="opacity: 0;">323 - 0** - **90</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="detail-row">
+          <span class="detail-label">Nominal</span>
+          <span class="detail-value strong" id="amount">IDR 10,000,000.00</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Biaya</span>
+          <span class="detail-value strong" id="fee">IDR 2,500.00</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Layanan Transfer</span>
+          <span class="detail-value" id="transferService">BI FAST</span>
+        </div>
+
+        <button class="download-btn" id="downloadPdf">Download PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const bankMapping = {
+      "ANZ Indonesia": "ANZ",
+      "Bank Central Asia": "BCA",
+      "BANK MANDIRI": "MANDIRI",
+      "BANK NEGARA INDONESIA": "BNI",
+      "BANK RAKYAT INDONESIA": "BRI",
+      "Bank CIMB Niaga": "CIMB NIAGA",
+      "Bank Danamon": "DANAMON",
+      "Bank Permata": "PERMATA",
+      "Bank Maybank Indonesia": "MAYBANK",
+      "BANK SYARIAH INDONESIA": "BSI",
+      "BTPN": "BTPN",
+      "Bank Mega": "MEGA",
+      "Bank Panin": "PANIN",
+      "Bank OCBC NISP": "OCBC NISP",
+      "Bank Bukopin": "BUKOPIN"
+    };
+
+    function getBankShortName(fullName) {
+      if (!fullName || fullName === 'N/A') return 'N/A';
+      
+      // Remove "BANK" prefix and trim
+      const cleanName = fullName.replace(/^BANK\s+/i, '').trim();
+      
+      if (bankMapping[fullName]) {
+        return bankMapping[fullName];
+      }
+      
+      const lowerFullName = fullName.toLowerCase();
+      for (const [key, value] of Object.entries(bankMapping)) {
+        if (key.toLowerCase() === lowerFullName || lowerFullName.includes(key.toLowerCase())) {
+          return value;
+        }
+      }
+      
+      return cleanName.toUpperCase();
+    }
+
+    function formatDateIndonesian(dateString) {
+      // Indonesian month abbreviations
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+      
+      if (!dateString || dateString === 'N/A') {
+        const now = new Date();
+        const day = String(now.getDate()).padStart(2, '0');
+        const month = months[now.getMonth()];
+        const year = now.getFullYear();
+        return `${day} ${month} ${year}`;
+      }
+      
+      // Parse date format: DD-MM-YYYY or similar
+      if (dateString.includes('-')) {
+        const parts = dateString.split('-');
+        if (parts.length === 3) {
+          // Assuming DD-MM-YYYY format
+          const day = parts[0].padStart(2, '0');
+          const monthIndex = parseInt(parts[1]) - 1;
+          const year = parts[2];
+          return `${day} ${months[monthIndex]} ${year}`;
+        }
+      }
+      
+      // If parsing fails, return current date
+      const now = new Date();
+      const day = String(now.getDate()).padStart(2, '0');
+      const month = months[now.getMonth()];
+      const year = now.getFullYear();
+      return `${day} ${month} ${year}`;
+    }
+
+    function formatAmount(amount) {
+      if (!amount || amount === 'N/A') return 'IDR 0.00';
+      
+      // Extract numeric value from string like "2,529,000.00 IDR"
+      const numericMatch = amount.match(/([\d,]+\.?\d*)/);
+      if (numericMatch) {
+        const numericAmount = parseFloat(numericMatch[1].replace(/,/g, ''));
+        return 'IDR ' + new Intl.NumberFormat('en-US', {
+          style: 'decimal',
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }).format(numericAmount);
+      }
+      
+      return 'IDR 0.00';
+    }
+
+    function formatAccountNumber(accountNo) {
+      if (!accountNo || accountNo === 'N/A') return 'N/A';
+      
+      // Remove all non-digit characters
+      const digitsOnly = accountNo.replace(/\D/g, '');
+      
+      if (digitsOnly.length === 0) return accountNo;
+      
+      // Format: 876-574-667 (3-3-3 pattern for 9 digits or similar grouping)
+      if (digitsOnly.length <= 3) return digitsOnly;
+      if (digitsOnly.length <= 6) return `${digitsOnly.slice(0, 3)}-${digitsOnly.slice(3)}`;
+      if (digitsOnly.length <= 9) return `${digitsOnly.slice(0, 3)}-${digitsOnly.slice(3, 6)}-${digitsOnly.slice(6)}`;
+      
+      // For longer account numbers, use 4-4-4 pattern
+      const parts = digitsOnly.match(/.{1,4}/g) || [];
+      return parts.join('-');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const params = new URLSearchParams(window.location.search);
+
+      // Set date from index (date parameter) - WITHOUT TIME
+      const dateParam = params.get('date');
+      document.getElementById('receiptDate').textContent = formatDateIndonesian(dateParam);
+
+      // Set beneficiary name from index
+      if (params.get('beneficiaryName')) {
+        document.getElementById('beneficiaryName').textContent = params.get('beneficiaryName').toUpperCase();
+      }
+
+      // Set bank name from index
+      if (params.get('bankName')) {
+        const shortBankName = getBankShortName(params.get('bankName'));
+        document.getElementById('bankName').textContent = shortBankName;
+      }
+
+      // Set account number from index with special formatting
+      if (params.get('accountNo')) {
+        document.getElementById('accountNo').textContent = formatAccountNumber(params.get('accountNo'));
+      }
+
+      // Set payout amount (top large amount and nominal)
+      if (params.get('amount')) {
+        const formattedAmount = formatAmount(params.get('amount'));
+        document.getElementById('amountLarge').textContent = formattedAmount;
+        document.getElementById('amount').textContent = formattedAmount;
+      }
+
+      // Biaya (fee) and Layanan Transfer are static
+      // These remain as default values: IDR 2,500.00 and BI FAST
+
+      document.getElementById('downloadPdf').addEventListener('click', function() {
+        const element = document.getElementById('receipt-container');
+        const opt = {
+          margin: 10,
+          filename: 'transfer_berhasil.pdf',
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 3 },
+          jsPDF: { unit: 'mm', format: 'a5', orientation: 'portrait' }
+        };
+
+        const printBtn = document.getElementById('downloadPdf');
+        printBtn.style.display = 'none';
+
+        html2pdf().set(opt).from(element).save().finally(() => {
+          printBtn.style.display = 'block';
+        });
+      });
+    });
+  </script>
+</body>
+</html>
